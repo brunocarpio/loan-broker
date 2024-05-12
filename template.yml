@@ -10,8 +10,8 @@ Resources:
             Principal:
               Service:
                 - lambda.amazonaws.com
-              Action:
-                - 'sts:AssumeRole'
+            Action:
+              - 'sts:AssumeRole'
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 
