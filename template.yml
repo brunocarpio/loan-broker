@@ -14,16 +14,6 @@ Resources:
               - 'sts:AssumeRole'
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-      Policies:
-        - PolicyName: S3Access
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: Allow
-                Action:
-                  - 's3:*'
-                Resource:
-                  - '*'
 
   CreditBureau:
     Type: AWS::Lambda::Function
@@ -32,7 +22,34 @@ Resources:
       Runtime: nodejs20.x
       Handler: CreditBureau.handler
       Code:
-        S3Bucket: cfn-experiments-001
-        S3Key: CreditBureau.zip
+        ZipFile: |
+          function getRandomInt(min, max) {
+            return min + Math.floor(Math.random() * (max - min))
+          }
+          exports.handler = async (event) => {
+            const min_score = 300
+            const max_score = 900
+
+            let ssn_regex = new RegExp("^\\d{3}-\\d{2}-\\d{4}$")
+            if (ssn_regex.test(event.SSN)) {
+              return {
+                statusCode: 200,
+                request_id: event.RequestId,
+                body: {
+                  SSN: event.SSN,
+                  score: getRandomInt(min_score, max_score),
+                  history: getRandomInt(1, 30)
+                }
+              }
+            } else {
+              return {
+                statusCode: 400,
+                request_id: event.RequestId,
+                body: {
+                  SSN: event.SSN
+                }
+              }
+            }
+          }
       FunctionName: loan-broker-CreditBureau
 
