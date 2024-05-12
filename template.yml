@@ -3,6 +3,7 @@ Resources:
   LambdaBasicExecutionRole:
     Type: AWS::IAM::Role
     Properties:
+      RoleName: LambdaBasicExecutionRole
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -52,4 +53,8 @@ Resources:
             }
           }
       FunctionName: loan-broker-CreditBureau
+  MortgageQuoteRequest:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: MortgageQuoteRequest
 
