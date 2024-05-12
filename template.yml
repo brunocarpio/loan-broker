@@ -15,11 +15,10 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 
-
   CreditBureau:
     Type: AWS::Lambda::Function
     Properties:
-      Role: !GettAtt LambdaBasicExecutionRole.Arn
+      Role: !GetAtt LambdaBasicExecutionRole.Arn
       Runtime: nodejs20.x
       Handler: CreditBureau.handler
       Code:
