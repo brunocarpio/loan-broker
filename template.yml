@@ -19,7 +19,7 @@ Resources:
   CreditBureau:
     Type: AWS::Lambda::Function
     Properties:
-      Role: !GettAtt LambdaBasicExecutionRole
+      Role: !GettAtt LambdaBasicExecutionRole.Arn
       Runtime: nodejs20.x
       Handler: CreditBureau.handler
       Code:
