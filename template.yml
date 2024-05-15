@@ -16,14 +16,14 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 
-  # CreditBureau:
-  #   Type: AWS::Lambda::Function
-  #   Properties:
-  #     Role: !GetAtt LambdaBasicExecutionRole.Arn
-  #     PackageType: Image
-  #     Code:
-  #       ImageUri: !Sub ${AWS::AccountId}.dkr.ecr.sa-east-1.amazonaws.com/creditbureau:latest
-  #     FunctionName: loan-broker-CreditBureau
+  CreditBureau:
+    Type: AWS::Lambda::Function
+    Properties:
+      Role: !GetAtt LambdaBasicExecutionRole.Arn
+      PackageType: Image
+      Code:
+        ImageUri: !Sub ${AWS::AccountId}.dkr.ecr.sa-east-1.amazonaws.com/creditbureau:latest
+      FunctionName: loan-broker-CreditBureau
 
   MortgageQuoteRequest:
     Type: AWS::SNS::Topic
