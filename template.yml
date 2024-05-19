@@ -40,6 +40,20 @@ Resources:
           MAX_LOAN_AMOUNT: 500000
           MIN_CREDIT_SCORE: 400
 
+  BankRecipientUniversal:
+    Type: AWS::Lambda::Function
+    Properties:
+      Role: !GetAtt LambdaBasicExecutionRole.Arn
+      PackageType: Image
+      Code:
+        ImageUri: !Sub ${AWS::AccountId}.dkr.ecr.sa-east-1.amazonaws.com/bankrecipient:latest
+      FunctionName: loan-broker-BankRecipientUniversal
+      Environment:
+        Variables:
+          BANK_ID: Universal
+          BASE_RATE: 4
+          MAX_LOAN_AMOUNT: 700000
+          MIN_CREDIT_SCORE: 500
 
   MortgageQuoteRequest:
     Type: AWS::SNS::Topic
