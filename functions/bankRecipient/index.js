@@ -18,25 +18,28 @@ function calcRate(amount, score) {
 }
 
 exports.handler = async (event) => {
-  console.log("event ", event.Records[0].Sns)
-  const data = JSON.parse(event.Records[0].Sns.Message)
+  console.log("event ", JSON.stringify(event))
+  const data = event.Records[0].Sns.Message
+  console.log("data ", data)
   const amount = data.amount
   const term = data.term // not used
   const score = data.credit.score
   const history = data.credit.history // not used
-  const requestId = event.Records[0].Sns.MessageAttributes.requestId
+  const requestId = event.Records[0].Sns.MessageAttributes.requestId.Value
 
   console.log('Loan Request over %d at credit score %d', amount, score)
   const rate = calcRate(amount, score)
+  console.log('computed rate ', rate)
   if (rate) {
     const quote = {
       rate: rate,
-      bankId: BANK_ID
+      bankId: BANK_ID,
       requestId: requestId
     }
-    console.log('quote ', quote)
+    console.log('quote ', JSON.stringify(quote))
     return quote
   } else {
     console.log('Rejecting Loan')
   }
 }
+
