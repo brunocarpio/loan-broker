@@ -169,11 +169,6 @@ Resources:
               AWS:
                 - !Sub ${AWS::AccountId}
 
-  BankRecipientPawnshopVersion:
-    Type: AWS::Lambda::Version
-    Properties:
-      FunctionName: !Ref BankRecipientPawnshop
-
   BankRecipientPawnshopDestination:
     Type: AWS::Lambda::EventInvokeConfig
     Properties:
@@ -181,5 +176,5 @@ Resources:
         OnSuccess:
           Destination: !GetAtt MortgageQuotes.Arn
       FunctionName: !Ref BankRecipientPawnshop
-      Qualifier: !GetAtt BankRecipientPawnshopVersion.Version
+      Qualifier: $LATEST
 
