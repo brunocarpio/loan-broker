@@ -156,5 +156,5 @@ Resources:
         OnSuccess:
           Destination: !Ref MortgageQuotes
       FunctionName: !Ref BankRecipientPawnshop
-      Qualifier: !GettAtt BankRecipientPawnshopVersion.Version
+      Qualifier: !GetAtt BankRecipientPawnshopVersion.Version
 
