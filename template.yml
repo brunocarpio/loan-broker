@@ -16,6 +16,31 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 
+  LambdaToSQSExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LambdaToSQSExecutionRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Policies:
+        - PolicyName: LambdaSendMessageSQS
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'sqs:SendMessage'
+                Resource: !Ref MortgageQuotes
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
   CreditBureau:
     Type: AWS::Lambda::Function
     Properties:
@@ -28,7 +53,7 @@ Resources:
   BankRecipientPawnshop:
     Type: AWS::Lambda::Function
     Properties:
-      Role: !GetAtt LambdaBasicExecutionRole.Arn
+      Role: !GetAtt LambdaToSQSExecutionRole.Arn
       PackageType: Image
       Code:
         ImageUri: !Sub ${AWS::AccountId}.dkr.ecr.sa-east-1.amazonaws.com/bankrecipient:latest
@@ -43,7 +68,7 @@ Resources:
   BankRecipientUniversal:
     Type: AWS::Lambda::Function
     Properties:
-      Role: !GetAtt LambdaBasicExecutionRole.Arn
+      Role: !GetAtt LambdaToSQSExecutionRole.Arn
       PackageType: Image
       Code:
         ImageUri: !Sub ${AWS::AccountId}.dkr.ecr.sa-east-1.amazonaws.com/bankrecipient:latest
@@ -58,7 +83,7 @@ Resources:
   BankRecipientPremium:
     Type: AWS::Lambda::Function
     Properties:
-      Role: !GetAtt LambdaBasicExecutionRole.Arn
+      Role: !GetAtt LambdaToSQSExecutionRole.Arn
       PackageType: Image
       Code:
         ImageUri: !Sub ${AWS::AccountId}.dkr.ecr.sa-east-1.amazonaws.com/bankrecipient:latest
