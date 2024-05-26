@@ -73,7 +73,7 @@ Resources:
   MortgageQuoteRequest:
     Type: AWS::SNS::Topic
     Properties:
-      TopicName: MortgageQuoteRequest
+      TopicName: loan-broker-MortgageQuoteRequest
 
   BankRecipientPawnshopSNSSubscription:
     Type: AWS::SNS::Subscription
@@ -120,3 +120,8 @@ Resources:
       Principal: sns.amazonaws.com
       SourceArn: !Ref MortgageQuoteRequest
 
+  MortgageQuotes:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: loan-broker-MortgageQuotes
+      MessageRetentionPeriod: 300
