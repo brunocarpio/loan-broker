@@ -75,3 +75,24 @@ Resources:
     Properties:
       TopicName: MortgageQuoteRequest
 
+  BankRecipientPawnshopSNSSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Endpoint: !GetAtt BankRecipientPawnshop.Arn
+      Protocol: lambda
+      TopicArn: !GetAtt MortgageQuoteRequest.Arn
+
+  BankRecipientUniversalSNSSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Endpoint: !GetAtt BankRecipientUniversal.Arn
+      Protocol: lambda
+      TopicArn: !GetAtt MortgageQuoteRequest.Arn
+
+  BankRecipientPremiumSNSSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      Endpoint: !GetAtt BankRecipientPremium.Arn
+      Protocol: lambda
+      TopicArn: !GetAtt MortgageQuoteRequest.Arn
+
