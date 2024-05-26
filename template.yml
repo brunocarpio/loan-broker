@@ -103,3 +103,20 @@ Resources:
       Action: lambda:InvokeFunction
       Principal: sns.amazonaws.com
       SourceArn: !Ref MortgageQuoteRequest
+
+  BankRecipientUniversalPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref BankRecipientUniversal
+      Action: lambda:InvokeFunction
+      Principal: sns.amazonaws.com
+      SourceArn: !Ref MortgageQuoteRequest
+
+  BankRecipientPremiumPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref BankRecipientPremium
+      Action: lambda:InvokeFunction
+      Principal: sns.amazonaws.com
+      SourceArn: !Ref MortgageQuoteRequest
+
