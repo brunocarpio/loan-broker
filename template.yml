@@ -154,7 +154,7 @@ Resources:
     Properties:
       DestinationConfig:
         OnSuccess:
-          Destination: !Ref MortgageQuotes
+          Destination: !GetAtt MortgageQuotes.Arn
       FunctionName: !Ref BankRecipientPawnshop
       Qualifier: !GetAtt BankRecipientPawnshopVersion.Version
 
