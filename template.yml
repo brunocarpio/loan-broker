@@ -96,3 +96,10 @@ Resources:
       Protocol: lambda
       TopicArn: !Ref MortgageQuoteRequest
 
+  BankRecipientPawnshopPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref BankRecipientPawnshop
+      Action: lambda:InvokeFunction
+      Principal: sns.amazonaws.com
+      SourceArn: !GetAtt MortgageQuoteRequest.Arn
