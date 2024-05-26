@@ -37,7 +37,6 @@ Resources:
               - Effect: Allow
                 Action:
                   - 'sqs:SendMessage'
-                Resource: !Ref MortgageQuotes
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 
