@@ -19,8 +19,9 @@ function calcRate(amount, score) {
 
 exports.handler = async (event) => {
   console.log("event ", JSON.stringify(event))
-  const data = event.Records[0].Sns.Message
-  console.log("data ", data)
+  const message = event.Records[0].Sns.Message
+  console.log("message ", message)
+  const data = JSON.parse(message)
   const amount = data.amount
   const term = data.term // not used
   const score = data.credit.score
