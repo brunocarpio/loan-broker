@@ -125,3 +125,22 @@ Resources:
     Properties:
       QueueName: loan-broker-MortgageQuotes
       MessageRetentionPeriod: 300
+
+  MortgageQuotesQueuePolicy:
+    Type: AWS::SQS::QueuePolicy
+    Properties:
+      Queues:
+        - !Ref MortgageQuotes
+      PolicyDocument:
+        Statement:
+          - Action:
+              - "SQS:SendMessage"
+              - "SQS:ReceiveMessage"
+              - "SQS:DeleteMessage"
+              - "SQS:ChangeMessageVisibility"
+            Effect: "Allow"
+            Resource: !Ref MortgageQuotes
+            Principal:
+              AWS:
+                - !Sub ${AWS::AccountId}
+
