@@ -144,3 +144,17 @@ Resources:
               AWS:
                 - !Sub ${AWS::AccountId}
 
+  BankRecipientPawnshopVersion:
+    Type: AWS::Lambda::Version
+    Properties:
+      FunctionName: !Ref BankRecipientPawnshop
+
+  BankRecipientPawnshopDestination:
+    Type: AWS::Lambda::EventInvokeConfig
+    Properties:
+      DestinationConfig:
+        OnSuccess:
+          Destination: !Ref MortgageQuotes
+      FunctionName: !Ref BankRecipientPawnshop
+      Qualifier: !GettAtt BankRecipientPawnshopVersion.Version
+
