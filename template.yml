@@ -201,3 +201,13 @@ Resources:
     Properties:
       Name: loan-broker-eb
 
+  EBPolicy:
+    Type: AWS::Events::EventBusPolicy
+    Properties:
+      Effect: Allow
+      Principal:
+        AWS:
+          - !Sub ${AWS::AccountId}
+      Action: "events:PutEvents"
+      Resource: !Ref LoanBrokerEB
+
