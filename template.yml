@@ -188,6 +188,7 @@ Resources:
     Properties:
       EventBusName: !Ref LoanBrokerEB
       Name: loan-broker-eb-rule
+      State: ENABLED
       EventPattern:
         detail:
           requestContext:
