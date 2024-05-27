@@ -201,29 +201,69 @@ Resources:
           InputPath: $.detail.responsePayload
 
   BankRecipientPawnshopDestination:
-      Type: AWS::Lambda::EventInvokeConfig
-      Properties:
-        DestinationConfig:
-          OnSuccess:
-            Destination: !GetAtt LoanBrokerEB.Arn
-        FunctionName: !Ref BankRecipientPawnshop
-        Qualifier: $LATEST
+    Type: AWS::Lambda::EventInvokeConfig
+    Properties:
+      DestinationConfig:
+        OnSuccess:
+          Destination: !GetAtt LoanBrokerEB.Arn
+      FunctionName: !Ref BankRecipientPawnshop
+      Qualifier: $LATEST
 
   BankRecipientUniversalDestination:
-      Type: AWS::Lambda::EventInvokeConfig
-      Properties:
-        DestinationConfig:
-          OnSuccess:
-            Destination: !GetAtt LoanBrokerEB.Arn
-        FunctionName: !Ref BankRecipientUniversal
-        Qualifier: $LATEST
+    Type: AWS::Lambda::EventInvokeConfig
+    Properties:
+      DestinationConfig:
+        OnSuccess:
+          Destination: !GetAtt LoanBrokerEB.Arn
+      FunctionName: !Ref BankRecipientUniversal
+      Qualifier: $LATEST
 
   BankRecipientPremiumDestination:
-      Type: AWS::Lambda::EventInvokeConfig
-      Properties:
-        DestinationConfig:
-          OnSuccess:
-            Destination: !GetAtt LoanBrokerEB.Arn
-        FunctionName: !Ref BankRecipientPremium
-        Qualifier: $LATEST
+    Type: AWS::Lambda::EventInvokeConfig
+    Properties:
+      DestinationConfig:
+        OnSuccess:
+          Destination: !GetAtt LoanBrokerEB.Arn
+      FunctionName: !Ref BankRecipientPremium
+      Qualifier: $LATEST
+
+  LoanBrokerStateMachineExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: loan-broker-state-machine-execution-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - states.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+        Policies:
+          - PolicyName: loan-broker-state-machine-execution-policy
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - "lambda:Invoke"
+                  Resource: !GetAtt CreditBureau.Arn
+
+  LoanBrokerStateMachine:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      StateMachineName: loan-broker-state-machine
+      DefinitionString: !Sub |
+        {
+          "StartAt": "GetCreditScore"
+          "States": {
+            "GetCreditScore": {
+              "Type": "Task",
+              "Resource": "${CreditBureau.Arn}"
+              "End": true
+            }
+          }
+        }
+      RoleArn: !GetAtt LoanBrokerStateMachineExecutionRole
 
