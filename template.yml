@@ -178,7 +178,7 @@ Resources:
   LoanBrokerEBPolicy:
     Type: AWS::Events::EventBusPolicy
     Properties:
-      StatementId: "PutForAll"
+      StatementId: "PutForAllInAccount"
       Principal: !Sub ${AWS::AccountId}
       Action: "events:PutEvents"
       EventBusName: !Ref LoanBrokerEB
