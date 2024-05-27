@@ -204,7 +204,7 @@ Resources:
   EBPolicy:
     Type: AWS::Events::EventBusPolicy
     Properties:
-      Effect: Allow
+      Effect: "Allow"
       Principal:
         AWS:
           - !Sub ${AWS::AccountId}
