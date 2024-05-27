@@ -240,15 +240,15 @@ Resources:
                 - states.amazonaws.com
             Action:
               - 'sts:AssumeRole'
-        Policies:
-          - PolicyName: loan-broker-state-machine-execution-policy
-            PolicyDocument:
-              Version: "2012-10-17"
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - "lambda:Invoke"
-                  Resource: !GetAtt CreditBureau.Arn
+      Policies:
+        - PolicyName: loan-broker-state-machine-execution-policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "lambda:Invoke"
+                Resource: !GetAtt CreditBureau.Arn
 
   LoanBrokerStateMachine:
     Type: AWS::StepFunctions::StateMachine
