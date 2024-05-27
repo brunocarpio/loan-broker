@@ -187,6 +187,7 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       EventBusName: !Ref LoanBrokerEB
+      Name: loan-broker-eb-rule
       EventPattern:
         detail:
           requestContext:
