@@ -206,7 +206,8 @@ Resources:
     Properties:
       StatementId: "PutForAll"
       Principal:
-        AWS: !Sub ${AWS::AccountId}
+        AWS:
+          - !Sub ${AWS::AccountId}
       Action: "events:PutEvents"
       EventBusName: !Ref LoanBrokerEB
 
