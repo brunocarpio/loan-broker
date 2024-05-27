@@ -201,3 +201,12 @@ Resources:
           Id: loan-broker-MortgageQuotes-SQS-target
           InputPath: $.detail.responsePayload
 
+  BankRecipientPawnshopDestination:
+      Type: AWS::Lambda::EventInvokeConfig
+      Properties:
+        DestinationConfig:
+          OnSuccess:
+            Destination: !GetAtt LoanBrokerEB.Arn
+        FunctionName: !Ref BankRecipientPawnshop
+        Qualifier: $LATEST
+
