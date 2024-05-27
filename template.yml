@@ -200,14 +200,4 @@ Resources:
     Type: AWS::Events::EventBus
     Properties:
       Name: loan-broker-eb
-      Policy:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: Allow
-            Principal:
-              AWS:
-                - !Sub ${AWS::AccountId}
-            Action:
-              - "events:PutEvents"
-            Resource: !Ref LoanBrokerEB
 
