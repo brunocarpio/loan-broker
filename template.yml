@@ -178,3 +178,21 @@ Resources:
       FunctionName: !Ref BankRecipientPawnshop
       Qualifier: $LATEST
 
+  BankRecipientUniversalDestination:
+    Type: AWS::Lambda::EventInvokeConfig
+    Properties:
+      DestinationConfig:
+        OnSuccess:
+          Destination: !GetAtt MortgageQuotes.Arn
+      FunctionName: !Ref BankRecipientUniversal
+      Qualifier: $LATEST
+
+  BankRecipientPremiumDestination:
+    Type: AWS::Lambda::EventInvokeConfig
+    Properties:
+      DestinationConfig:
+        OnSuccess:
+          Destination: !GetAtt MortgageQuotes.Arn
+      FunctionName: !Ref BankRecipientPremium
+      Qualifier: $LATEST
+
