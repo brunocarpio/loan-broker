@@ -173,12 +173,30 @@ Resources:
     Type: AWS::Events::EventBus
     Properties:
       Name: loan-broker-eb
+      Description: "Message and content filter"
 
-  EBPolicy:
+  LoanBrokerEBPolicy:
     Type: AWS::Events::EventBusPolicy
     Properties:
       StatementId: "PutForAll"
       Principal: !Sub ${AWS::AccountId}
       Action: "events:PutEvents"
       EventBusName: !Ref LoanBrokerEB
+
+  LoanBrokerEBRule:
+    Type: AWS::Events::Rule
+    Properties:
+      EventBusName: !Ref LoanBrokerEB
+      EventPattern:
+        detail:
+          requestContext:
+            functionArn:
+              - prefix: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:loan-broker-Bank
+          responsePayload:
+            bankId:
+              - exists: true
+      Targets:
+        - Arn: !GetAtt MortgageQuotes.Arn
+          Id: loan-broker-MortgageQuotes-SQS-target
+          InputPath: $.detail.responsePayload
 
