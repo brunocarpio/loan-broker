@@ -164,10 +164,8 @@ Resources:
               - "SQS:DeleteMessage"
               - "SQS:ChangeMessageVisibility"
             Effect: "Allow"
-            Resource: !Ref MortgageQuotes
-            Principal:
-              AWS:
-                - !Sub ${AWS::AccountId}
+            Resource: !GetAtt MortgageQuotes.Arn
+            Principal: { Service: events.amazonaws.com }
 
   LoanBrokerEB:
     Type: AWS::Events::EventBus
