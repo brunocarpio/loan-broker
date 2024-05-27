@@ -204,10 +204,9 @@ Resources:
   EBPolicy:
     Type: AWS::Events::EventBusPolicy
     Properties:
-      Effect: "Allow"
+      StatementId: "PutForAll"
       Principal:
-        AWS:
-          - !Sub ${AWS::AccountId}
+        AWS: !Sub "${AWS::AccountId}"
       Action: "events:PutEvents"
-      Resource: !Ref LoanBrokerEB
+      EventBusName: !Ref LoanBrokerEB
 
