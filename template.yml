@@ -267,8 +267,8 @@ Resources:
                 "requestId.$": "$$.Execution.Id"
               },
               "ResultSelector": {
-                "score.$": "$.Payload.body.score",
-                "history.$": "$.Payload.body.history"
+                "score.$": "$.body.score",
+                "history.$": "$.body.history"
               },
               "ResultPath": "$.credit"
             }
