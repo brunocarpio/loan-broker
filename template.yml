@@ -261,9 +261,21 @@ Resources:
             "GetCreditScore": {
               "Type": "Task",
               "Resource": "${CreditBureau.Arn}",
-              "End": true
+              "End": true,
+              "Parameters": {
+                "Payload": {
+                  "ssn.$": "$.ssn",
+                  "requestId.$": "$$.Execution.Id"
+                }
+              },
+              "ResultSelector": {
+                "score.$": "$.Payload.body.score",
+                "history.$": "$.Payload.body.history"
+              },
+              "ResultPath": "$.credit"
             }
           }
         }
       RoleArn: !GetAtt LoanBrokerStateMachineExecutionRole.Arn
+      StateMachineType: STANDARD
 
