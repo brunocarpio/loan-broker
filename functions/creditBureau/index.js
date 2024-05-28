@@ -9,8 +9,8 @@ function getRandomInt(min, max) {
 
 exports.handler = async (event) => {
   console.log("event ", JSON.stringify(event))
-  const ssn = event.ssn
-  const requestId = event.requestId
+  const ssn = event.Payload.ssn
+  const requestId = event.Payload.requestId
 
   const ssnRegex = new RegExp("^\\d{3}-\\d{2}-\\d{4}$")
 
