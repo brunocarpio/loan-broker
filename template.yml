@@ -256,11 +256,11 @@ Resources:
       StateMachineName: loan-broker-state-machine
       DefinitionString: !Sub |
         {
-          "StartAt": "GetCreditScore"
+          "StartAt": "GetCreditScore",
           "States": {
             "GetCreditScore": {
               "Type": "Task",
-              "Resource": "${CreditBureau.Arn}"
+              "Resource": "${CreditBureau.Arn}",
               "End": true
             }
           }
