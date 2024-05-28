@@ -8,6 +8,7 @@ function getRandomInt(min, max) {
 }
 
 exports.handler = async (event) => {
+  console.log("event ", JSON.stringify(event))
   const ssn = event.ssn
   const requestId = event.requestId
 
