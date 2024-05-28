@@ -263,10 +263,8 @@ Resources:
               "Resource": "${CreditBureau.Arn}",
               "End": true,
               "Parameters": {
-                "Payload": {
-                  "ssn.$": "$.ssn",
-                  "requestId.$": "$$.Execution.Id"
-                }
+                "ssn.$": "$.ssn",
+                "requestId.$": "$$.Execution.Id"
               },
               "ResultSelector": {
                 "score.$": "$.Payload.body.score",
