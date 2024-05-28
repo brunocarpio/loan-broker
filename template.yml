@@ -253,7 +253,7 @@ Resources:
   LoanBrokerStateMachine:
     Type: AWS::StepFunctions::StateMachine
     Properties:
-      StateMachineName: loan-broker-state-machine
+      StateMachineName: loan-broker-states
       DefinitionString: !Sub |
         {
           "StartAt": "GetCreditScore",
