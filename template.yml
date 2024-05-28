@@ -247,7 +247,7 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - "lambda:Invoke"
+                  - "lambda:InvokeFunction"
                 Resource: !GetAtt CreditBureau.Arn
 
   LoanBrokerStateMachine:
