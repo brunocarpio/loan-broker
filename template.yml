@@ -249,6 +249,10 @@ Resources:
                 Action:
                   - "lambda:InvokeFunction"
                 Resource: !GetAtt CreditBureau.Arn
+              - Effect: Allow
+                Action:
+                  - "sns:Publish"
+                Resource: !GetAtt MortgageQuoteRequest.Arn
 
   LoanBrokerStateMachine:
     Type: AWS::StepFunctions::StateMachine
