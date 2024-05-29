@@ -252,7 +252,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - "sns:Publish"
-                Resource: !GetAtt MortgageQuoteRequest.Arn
+                Resource: !Ref MortgageQuoteRequest
 
   LoanBrokerStateMachine:
     Type: AWS::StepFunctions::StateMachine
