@@ -277,7 +277,7 @@ Resources:
               "Resource": "arn:aws:states:::sns:publish",
               "Parameters": {
                 "Message.$": "$",
-                "TopicArn": "${MortgageQuoteRequest.Arn}",
+                "TopicArn": "${MortgageQuoteRequest}",
                 "MessageAttributes": {
                   "requestId": {
                     "DataType": "String",
