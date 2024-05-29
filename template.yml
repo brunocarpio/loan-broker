@@ -255,41 +255,41 @@ Resources:
     Properties:
       StateMachineName: loan-broker-states
       DefinitionString: !Sub |
-      {
-        "StartAt": "GetCreditScore",
-        "States": {
-          "GetCreditScore": {
-            "Type": "Task",
-            "Resource": "${CreditBureau.Arn}",
-            "Parameters": {
-              "ssn.$": "$.ssn",
-              "requestId.$": "$$.Execution.Id"
-            },
-            "ResultSelector": {
-              "score.$": "$.body.score",
-              "history.$": "$.body.history"
-            },
-            "ResultPath": "$.credit",
-            "Next": "SNSPublish"
-          },
-          "SNSPublish": {
-            "Type": "Task",
-            "Resource": "arn:aws:states:::sns:publish",
-            "Parameters": {
-              "Message.$": "$",
-              "TopicArn": "${MortgageQuoteRequest.Arn}",
-              "MessageAttributes": {
-                "requestId": {
-                  "DataType": "String",
-                  "StringValue.$": "$$.Execution.Id"
-                  }
-                }
+        {
+          "StartAt": "GetCreditScore",
+          "States": {
+            "GetCreditScore": {
+              "Type": "Task",
+              "Resource": "${CreditBureau.Arn}",
+              "Parameters": {
+                "ssn.$": "$.ssn",
+                "requestId.$": "$$.Execution.Id"
               },
-            "End": true,
-            "ResultPath": "$.SNSResponse"
+              "ResultSelector": {
+                "score.$": "$.body.score",
+                "history.$": "$.body.history"
+              },
+              "ResultPath": "$.credit",
+              "Next": "SNSPublish"
+            },
+            "SNSPublish": {
+              "Type": "Task",
+              "Resource": "arn:aws:states:::sns:publish",
+              "Parameters": {
+                "Message.$": "$",
+                "TopicArn": "${MortgageQuoteRequest.Arn}",
+                "MessageAttributes": {
+                  "requestId": {
+                    "DataType": "String",
+                    "StringValue.$": "$$.Execution.Id"
+                    }
+                  }
+                },
+              "End": true,
+              "ResultPath": "$.SNSResponse"
+            }
           }
         }
-      }
-RoleArn: !GetAtt LoanBrokerStateMachineExecutionRole.Arn
+      RoleArn: !GetAtt LoanBrokerStateMachineExecutionRole.Arn
       StateMachineType: STANDARD
 
