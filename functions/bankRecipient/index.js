@@ -41,6 +41,8 @@ exports.handler = async (event) => {
     return quote
   } else {
     console.log('Rejecting Loan')
+    console.log('requestId ', requestId)
+    return null
   }
 }
 
