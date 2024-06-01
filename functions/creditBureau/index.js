@@ -15,22 +15,19 @@ exports.handler = async (event) => {
   const ssnRegex = new RegExp("^\\d{3}-\\d{2}-\\d{4}$")
 
   if (ssnRegex.test(ssn)) {
+    const credit = {
+      requestId: requestId,
+      ssn: ssn,
+      score: getRandomInt(MIN_SCORE, MAX_SCORE),
+      history: getRandomInt(MIN_HISTORY, MAX_HISTORY)
+    }
+    console.log('credit ', credit)
     return {
       statusCode: 200,
-      requestId: requestId,
-      body: {
-        ssn: ssn,
-        score: getRandomInt(MIN_SCORE, MAX_SCORE),
-        history: getRandomInt(MIN_HISTORY, MAX_HISTORY)
-      }
+      body: credit
     }
   } else {
-    return {
-      statusCode: 400,
-      request_id: requestId,
-      body: {
-        ssn: ssn
-      }
-    }
+    const message = JSON.stringify({ error: 'Invalid SSN', requestId: requestId, ssn: ssn })
+    throw new Error(message)
   }
 }
