@@ -19,7 +19,7 @@ Resources:
   LoanBrokerLambdaBanksExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: loan-broker-lambda-banks-execution-role
+      RoleName: !Sub ${AWS::StackName}-lambda-banks-execution-role
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -30,7 +30,7 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       Policies:
-        - PolicyName: loan-broker-lambda-banks-execution-policy
+        - PolicyName: !Sub ${AWS::StackName}-lambda-banks-execution-policy
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -48,7 +48,7 @@ Resources:
       PackageType: Image
       Code:
         ImageUri: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/creditbureau:latest
-      FunctionName: loan-broker-CreditBureau
+      FunctionName: !Sub ${AWS::StackName}-CreditBureau
 
   BankRecipientPawnshop:
     Type: AWS::Lambda::Function
@@ -57,7 +57,7 @@ Resources:
       PackageType: Image
       Code:
         ImageUri: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/bankrecipient:latest
-      FunctionName: loan-broker-BankRecipientPawnshop
+      FunctionName: !Sub ${AWS::StackName}-BankRecipientPawnshop
       Environment:
         Variables:
           BANK_ID: PawnShop
@@ -72,7 +72,7 @@ Resources:
       PackageType: Image
       Code:
         ImageUri: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/bankrecipient:latest
-      FunctionName: loan-broker-BankRecipientUniversal
+      FunctionName: !Sub ${AWS::StackName}-BankRecipientUniversal
       Environment:
         Variables:
           BANK_ID: Universal
@@ -87,7 +87,7 @@ Resources:
       PackageType: Image
       Code:
         ImageUri: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/bankrecipient:latest
-      FunctionName: loan-broker-BankRecipientPremium
+      FunctionName: !Sub ${AWS::StackName}-BankRecipientPremium
       Environment:
         Variables:
           BANK_ID: Premium
@@ -95,31 +95,31 @@ Resources:
           MAX_LOAN_AMOUNT: 900000
           MIN_CREDIT_SCORE: 600
 
-  MortgageQuoteRequest:
+  MortgageQuoteTopic:
     Type: AWS::SNS::Topic
     Properties:
-      TopicName: loan-broker-MortgageQuoteRequest
+      TopicName: !Sub ${AWS::StackName}-MortgageQuoteTopic
 
   BankRecipientPawnshopSNSSubscription:
     Type: AWS::SNS::Subscription
     Properties:
       Endpoint: !GetAtt BankRecipientPawnshop.Arn
       Protocol: lambda
-      TopicArn: !Ref MortgageQuoteRequest
+      TopicArn: !Ref MortgageQuoteTopic
 
   BankRecipientUniversalSNSSubscription:
     Type: AWS::SNS::Subscription
     Properties:
       Endpoint: !GetAtt BankRecipientUniversal.Arn
       Protocol: lambda
-      TopicArn: !Ref MortgageQuoteRequest
+      TopicArn: !Ref MortgageQuoteTopic
 
   BankRecipientPremiumSNSSubscription:
     Type: AWS::SNS::Subscription
     Properties:
       Endpoint: !GetAtt BankRecipientPremium.Arn
       Protocol: lambda
-      TopicArn: !Ref MortgageQuoteRequest
+      TopicArn: !Ref MortgageQuoteTopic
 
   BankRecipientPawnshopPermission:
     Type: AWS::Lambda::Permission
@@ -127,7 +127,7 @@ Resources:
       FunctionName: !Ref BankRecipientPawnshop
       Action: lambda:InvokeFunction
       Principal: sns.amazonaws.com
-      SourceArn: !Ref MortgageQuoteRequest
+      SourceArn: !Ref MortgageQuoteTopic
 
   BankRecipientUniversalPermission:
     Type: AWS::Lambda::Permission
@@ -135,7 +135,7 @@ Resources:
       FunctionName: !Ref BankRecipientUniversal
       Action: lambda:InvokeFunction
       Principal: sns.amazonaws.com
-      SourceArn: !Ref MortgageQuoteRequest
+      SourceArn: !Ref MortgageQuoteTopic
 
   BankRecipientPremiumPermission:
     Type: AWS::Lambda::Permission
@@ -143,12 +143,12 @@ Resources:
       FunctionName: !Ref BankRecipientPremium
       Action: lambda:InvokeFunction
       Principal: sns.amazonaws.com
-      SourceArn: !Ref MortgageQuoteRequest
+      SourceArn: !Ref MortgageQuoteTopic
 
   MortgageQuotes:
     Type: AWS::SQS::Queue
     Properties:
-      QueueName: loan-broker-MortgageQuotes
+      QueueName: !Sub ${AWS::StackName}-MortgageQuotes
       MessageRetentionPeriod: 300
 
   MortgageQuotesQueuePolicy:
@@ -170,7 +170,7 @@ Resources:
   LoanBrokerEB:
     Type: AWS::Events::EventBus
     Properties:
-      Name: loan-broker-eb
+      Name: !Sub ${AWS::StackName}-eb
       Description: "Message and content filter"
 
   LoanBrokerEBPolicy:
@@ -185,19 +185,19 @@ Resources:
     Type: AWS::Events::Rule
     Properties:
       EventBusName: !Ref LoanBrokerEB
-      Name: loan-broker-eb-rule
+      Name: !Sub ${AWS::StackName}-filter
       State: ENABLED
       EventPattern:
         detail:
           requestContext:
             functionArn:
-              - prefix: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:loan-broker-Bank
+              - prefix: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:!Sub ${AWS::StackName}-Bank
           responsePayload:
             bankId:
               - exists: true
       Targets:
         - Arn: !GetAtt MortgageQuotes.Arn
-          Id: loan-broker-MortgageQuotes-SQS-target
+          Id: !Sub ${AWS::StackName}-MortgageQuotes-SQS-target
           InputPath: $.detail.responsePayload
 
   BankRecipientPawnshopDestination:
@@ -230,7 +230,7 @@ Resources:
   LoanBrokerStateMachineExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: loan-broker-state-machine-execution-role
+      RoleName: !Sub ${AWS::StackName}-state-machine-execution-role
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -241,7 +241,7 @@ Resources:
             Action:
               - 'sts:AssumeRole'
       Policies:
-        - PolicyName: loan-broker-state-machine-execution-policy
+        - PolicyName: !Sub ${AWS::StackName}-state-machine-execution-policy
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
@@ -252,12 +252,12 @@ Resources:
               - Effect: Allow
                 Action:
                   - "sns:Publish"
-                Resource: !Ref MortgageQuoteRequest
+                Resource: !Ref MortgageQuoteTopic
 
   LoanBrokerStateMachine:
     Type: AWS::StepFunctions::StateMachine
     Properties:
-      StateMachineName: loan-broker-states
+      StateMachineName: !Sub ${AWS::StackName}-states
       DefinitionString: !Sub |
         {
           "StartAt": "GetCreditScore",
@@ -281,7 +281,7 @@ Resources:
               "Resource": "arn:aws:states:::sns:publish",
               "Parameters": {
                 "Message.$": "$",
-                "TopicArn": "${MortgageQuoteRequest}",
+                "TopicArn": "${MortgageQuoteTopic}",
                 "MessageAttributes": {
                   "requestId": {
                     "DataType": "String",
