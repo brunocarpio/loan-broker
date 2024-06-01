@@ -191,7 +191,7 @@ Resources:
         detail:
           requestContext:
             functionArn:
-              - prefix: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:!Sub ${AWS::StackName}-Bank
+              - prefix: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${AWS::StackName}-Bank
           responsePayload:
             bankId:
               - exists: true
